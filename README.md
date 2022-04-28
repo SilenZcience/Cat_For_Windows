@@ -36,7 +36,11 @@
             <li><a href="#installation">Installation</a></li>
          </ul>
       </li>
-      <li><a href="#usage">Usage</a></li>
+      <li><a href="#usage">Usage</a>
+         <ul>
+         <li><a href="#examples">Examples</a></li>
+         </ul>
+      </li>
       <li><a href="#contact">Contact</a></li>
    </ol>
 </details>
@@ -59,6 +63,10 @@ Additionally it includes the feature to strip and reverse the content of any giv
 
 No Prerequisites are neccessary; The stand-alone executable `cat.exe` is sufficient.
 
+> :warning: **You should never trust any execuatable file!**
+
+> AutoIt executables are known to be **misidentified** as a **virus**. In this case you will need to exclude the binary-file from any antivirus software installed. Feel free to read/compile the [cat.au3](src/cat.au3) yourself using the official [Aut2Exe Converter](https://www.autoitscript.com/site/autoit/downloads/).
+
 ### Installation
 
 1. Clone the repository and move into the root\bin directory with:
@@ -77,10 +85,17 @@ cd Cat_For_Windows\bin
 
 1. run the following command in any cmd:
 
-
 ```console
 cat --help
 ```
+
+### Examples
+
+![](img/help.png?raw=true "help.png")
+
+![](img/example1.png?raw=true "example1.png")
+
+![](img/example2.png?raw=true "example2.png")
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -92,5 +107,7 @@ cat --help
 [OS-Windows]: https://svgshare.com/i/ZhY.svg
 
 [MadeWith-AutoIt]: https://img.shields.io/badge/Made%20with-AutoIt-brightgreen
+
+[Warning]: https://img.shields.io/badge/warning-orange?style=for-the-badge
 
 [GitHub-SilenZcience]: https://img.shields.io/badge/GitHub-SilenZcience-orange
