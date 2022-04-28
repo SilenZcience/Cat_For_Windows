@@ -63,7 +63,7 @@ Additionally it includes the feature to strip and reverse the content of any giv
 
 No Prerequisites are neccessary; The stand-alone executable `cat.exe` is sufficient.
 
-> :warning: **You should never trust any execuatable file!**
+> :warning: **You should never trust any executable file!**
 
 > AutoIt executables are known for getting **misidentified** as a **virus**. In this case you will need to exclude the binary-file from any antivirus software installed. Feel free to read/compile the [cat.au3](src/cat.au3) yourself using the official [Aut2Exe Converter](https://www.autoitscript.com/site/autoit/downloads/).
 
