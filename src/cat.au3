@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Change2CUI=y
 #AutoIt3Wrapper_Res_Comment=Simple Command-line Tool made in AutoIt
 #AutoIt3Wrapper_Res_Description=Cat_For_Windows
-#AutoIt3Wrapper_Res_Fileversion=1.0.0.1
+#AutoIt3Wrapper_Res_Fileversion=1.0.0.2
 #AutoIt3Wrapper_Res_ProductName=cat
 #AutoIt3Wrapper_Res_ProductVersion=1.0.0.1
 #AutoIt3Wrapper_Res_Language=1033
@@ -387,22 +387,9 @@ Func _Debug()
 	Next
 	_COut("=> ($ReadCreateFile): " & $ReadCreateFile & @LF)
 	_COut(@LF)
-	_COut($ParamList[0][0] & ", " & $ParamList[0][1] & ": " & $ParamUsage[0] & @LF)
-	_COut($ParamList[1][0] & ", " & $ParamList[1][1] & ": " & $ParamUsage[1] & @LF)
-	_COut($ParamList[2][0] & ", " & $ParamList[2][1] & ": " & $ParamUsage[2] & @LF)
-	_COut($ParamList[3][0] & ", " & $ParamList[3][1] & ": " & $ParamUsage[3] & @LF)
-	_COut($ParamList[4][0] & ", " & $ParamList[4][1] & ": " & $ParamUsage[4] & @LF)
-	_COut($ParamList[5][0] & ", " & $ParamList[5][1] & ": " & $ParamUsage[5] & @LF)
-	_COut($ParamList[6][0] & ", " & $ParamList[6][1] & ": " & $ParamUsage[6] & @LF)
-	_COut($ParamList[7][0] & ", " & $ParamList[7][1] & ": " & $ParamUsage[7] & @LF)
-	_COut($ParamList[9][0] & ", " & $ParamList[9][1] & ": " & $ParamUsage[9] & @LF)
-	_COut($ParamList[10][0] & ", " & $ParamList[10][1] & ": " & $ParamUsage[10] & @LF)
-	_COut($ParamList[11][0] & ", " & $ParamList[11][1] & ": " & $ParamUsage[11] & @LF)
-	_COut($ParamList[12][0] & ", " & $ParamList[12][1] & ": " & $ParamUsage[12] & @LF)
-	_COut($ParamList[13][0] & ", " & $ParamList[13][1] & ": " & $ParamUsage[13] & @LF)
-	_COut($ParamList[14][0] & ", " & $ParamList[14][1] & ": " & $ParamUsage[14] & @LF)
-	_COut($ParamList[15][0] & ", " & $ParamList[15][1] & ": " & $ParamUsage[15] & @LF)
-	_COut($ParamList[16][0] & ", " & $ParamList[16][1] & ": " & $ParamUsage[16] & @LF)
+	For $i = 0 To Ubound($ParamList)-1
+		_COut($ParamList[$i][0] & ", " & $ParamList[$i][1] & ": " & $ParamUsage[$i] & @LF)
+	Next
 	_COut("($ReverseLines): " & $ReverseLines & @LF)
 	_COut("($CutLines): " & $CutLines & @LF)
 	_COut("($SplitLinesFromTo[0]): " & $SplitLinesFromTo[0] & @LF)
