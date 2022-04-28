@@ -177,41 +177,42 @@ Func _PrintFile($aFile, $LastFile = False, $fileIndex = 1)
 	Local $fFile = FileOpen($aFile, 0)
 	Local $fContent = FileReadToArray($fFile)
 	Local $fLength = @extended
-	Local $iDecimal, $fLineTrimWhitespaces
+	Local $iDecimal, $fLineTrimWhitespaces, $iLine
 	If $ParamUsage[4] Then _ArrayReverse($fContent)
 	For $i = 0 To $fLength-1
-		$fLineTrimWhitespaces = StringStripWS($fContent[$i], 3)
+		$iLine = $fContent[$i]
+		$fLineTrimWhitespaces = StringStripWS($iLine, 3)
 		If $ParamUsage[14] and StringIsDigit($fLineTrimWhitespaces) Then
-			$fContent[$i] &= " {Hexadecimal: " & _DecimalToHex($fLineTrimWhitespaces) & "; Binary: " & _DecimalToBinary($fLineTrimWhitespaces) & "}"
+			$iLine &= " {Hexadecimal: " & _DecimalToHex($fLineTrimWhitespaces) & "; Binary: " & _DecimalToBinary($fLineTrimWhitespaces) & "}"
 		EndIf
 		If $ParamUsage[15] Then
 			$iDecimal = _HexToDecimal($fLineTrimWhitespaces)
-			$fContent[$i] &= " {Decimal: " & $iDecimal & "; Binary: " & _DecimalToBinary($iDecimal) & "}"
+			$iLine &= " {Decimal: " & $iDecimal & "; Binary: " & _DecimalToBinary($iDecimal) & "}"
 		EndIf
 		If $ParamUsage[16] and StringIsDigit($fLineTrimWhitespaces) Then
 			$iDecimal = _BinaryToDecimal($fLineTrimWhitespaces)
-			$fContent[$i] &= " {Decimal: " & $iDecimal & "; Hexadecimal: " & _DecimalToHex($iDecimal) & "}"
+			$iLine &= " {Decimal: " & $iDecimal & "; Hexadecimal: " & _DecimalToHex($iDecimal) & "}"
 		EndIf
-		If $ParamUsage[6] and $fContent[$i] == "" Then ContinueLoop
-		If $ParamUsage[3] and $i > 0 and $fContent[$i] == $fContent[$i-1] Then ContinueLoop
-		If $ParamUsage[1] Then $fContent[$i] = $fContent[$i] & "$"
+		If $ParamUsage[6] and $iLine == "" Then ContinueLoop
+		If $ParamUsage[3] and $i > 0 and $iLine == $fContent[$i-1] Then ContinueLoop
+		If $ParamUsage[1] Then $iLine = $iLine & "$"
 
 		If $FirstCutOrFirstReverse == 0 Then
-			If $ReverseLines Then $fContent[$i] = StringReverse($fContent[$i])
+			If $ReverseLines Then $iLine = StringReverse($iLine)
 			If $CutLines Then
-				$fContent[$i] = StringMid($fContent[$i], $SplitLinesFromTo[0], $SplitLinesFromTo[1] - $SplitLinesFromTo[0])
+				$iLine = StringMid($iLine, $SplitLinesFromTo[0], $SplitLinesFromTo[1] - $SplitLinesFromTo[0])
 			EndIf
 		ElseIf $FirstCutOrFirstReverse == 1 Then
 			If $CutLines Then
-				$fContent[$i] = StringMid($fContent[$i], $SplitLinesFromTo[0], $SplitLinesFromTo[1] - $SplitLinesFromTo[0])
+				$iLine = StringMid($iLine, $SplitLinesFromTo[0], $SplitLinesFromTo[1] - $SplitLinesFromTo[0])
 			EndIf
-			If $ReverseLines Then $fContent[$i] = StringReverse($fContent[$i])
+			If $ReverseLines Then $iLine = StringReverse($iLine)
 		EndIf
 
-		If $ParamUsage[2] Then $fContent[$i] = StringReplace($fContent[$i], @TAB, "^I")
+		If $ParamUsage[2] Then $iLine = StringReplace($iLine, @TAB, "^I")
 
 		If $ParamUsage[0] Then _COut(_GetLineNumberPrefix($fileIndex, ($ParamUsage[4] ? ($FileCount-$i) : ($FileCount+($i+1)))))
-		_COut($fContent[$i])
+		_COut($iLine)
 		_COut(@LF)
 	Next
 	$FileCount += $ParamUsage[4] ? -$fLength : $fLength
@@ -386,22 +387,22 @@ Func _Debug()
 	Next
 	_COut("=> ($ReadCreateFile): " & $ReadCreateFile & @LF)
 	_COut(@LF)
-	_COut($ParamList[0][0] & "($ParamUsage[0]): " & $ParamUsage[0] & @LF)
-	_COut($ParamList[1][0] & "($ParamUsage[1]): " & $ParamUsage[1] & @LF)
-	_COut($ParamList[2][0] & "($ParamUsage[2]): " & $ParamUsage[2] & @LF)
-	_COut($ParamList[3][0] & "($ParamUsage[3]): " & $ParamUsage[3] & @LF)
-	_COut($ParamList[4][0] & "($ParamUsage[4]): " & $ParamUsage[4] & @LF)
-	_COut($ParamList[5][0] & "($ParamUsage[5]): " & $ParamUsage[5] & @LF)
-	_COut($ParamList[6][0] & "($ParamUsage[6]): " & $ParamUsage[6] & @LF)
-	_COut($ParamList[7][0] & "($ParamUsage[7]): " & $ParamUsage[7] & @LF)
-	_COut($ParamList[9][0] & "($ParamUsage[9]): " & $ParamUsage[9] & @LF)
-	_COut($ParamList[10][0] & "($ParamUsage[10]): " & $ParamUsage[10] & @LF)
-	_COut($ParamList[11][0] & "($ParamUsage[11]): " & $ParamUsage[11] & @LF)
-	_COut($ParamList[12][0] & "($ParamUsage[12]): " & $ParamUsage[12] & @LF)
-	_COut($ParamList[13][0] & "($ParamUsage[13]): " & $ParamUsage[13] & @LF)
-	_COut($ParamList[14][0] & "($ParamUsage[14]): " & $ParamUsage[14] & @LF)
-	_COut($ParamList[15][0] & "($ParamUsage[15]): " & $ParamUsage[15] & @LF)
-	_COut($ParamList[16][0] & "($ParamUsage[16]): " & $ParamUsage[16] & @LF)
+	_COut($ParamList[0][0] & ", " & $ParamList[0][1] & ": " & $ParamUsage[0] & @LF)
+	_COut($ParamList[1][0] & ", " & $ParamList[1][1] & ": " & $ParamUsage[1] & @LF)
+	_COut($ParamList[2][0] & ", " & $ParamList[2][1] & ": " & $ParamUsage[2] & @LF)
+	_COut($ParamList[3][0] & ", " & $ParamList[3][1] & ": " & $ParamUsage[3] & @LF)
+	_COut($ParamList[4][0] & ", " & $ParamList[4][1] & ": " & $ParamUsage[4] & @LF)
+	_COut($ParamList[5][0] & ", " & $ParamList[5][1] & ": " & $ParamUsage[5] & @LF)
+	_COut($ParamList[6][0] & ", " & $ParamList[6][1] & ": " & $ParamUsage[6] & @LF)
+	_COut($ParamList[7][0] & ", " & $ParamList[7][1] & ": " & $ParamUsage[7] & @LF)
+	_COut($ParamList[9][0] & ", " & $ParamList[9][1] & ": " & $ParamUsage[9] & @LF)
+	_COut($ParamList[10][0] & ", " & $ParamList[10][1] & ": " & $ParamUsage[10] & @LF)
+	_COut($ParamList[11][0] & ", " & $ParamList[11][1] & ": " & $ParamUsage[11] & @LF)
+	_COut($ParamList[12][0] & ", " & $ParamList[12][1] & ": " & $ParamUsage[12] & @LF)
+	_COut($ParamList[13][0] & ", " & $ParamList[13][1] & ": " & $ParamUsage[13] & @LF)
+	_COut($ParamList[14][0] & ", " & $ParamList[14][1] & ": " & $ParamUsage[14] & @LF)
+	_COut($ParamList[15][0] & ", " & $ParamList[15][1] & ": " & $ParamUsage[15] & @LF)
+	_COut($ParamList[16][0] & ", " & $ParamList[16][1] & ": " & $ParamUsage[16] & @LF)
 	_COut("($ReverseLines): " & $ReverseLines & @LF)
 	_COut("($CutLines): " & $CutLines & @LF)
 	_COut("($SplitLinesFromTo[0]): " & $SplitLinesFromTo[0] & @LF)
