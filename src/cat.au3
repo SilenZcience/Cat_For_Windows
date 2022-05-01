@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Change2CUI=y
 #AutoIt3Wrapper_Res_Comment=Simple Command-line Tool made in AutoIt
 #AutoIt3Wrapper_Res_Description=Cat_For_Windows
-#AutoIt3Wrapper_Res_Fileversion=1.0.0.2
+#AutoIt3Wrapper_Res_Fileversion=1.0.1.1
 #AutoIt3Wrapper_Res_ProductName=cat
 #AutoIt3Wrapper_Res_ProductVersion=1.0.0.1
 #AutoIt3Wrapper_Res_Language=1033
@@ -37,7 +37,7 @@ Global $FromFile[0] = []
 Global $FileCount = 0
 Global $FileLineMaxLength = 0
 Global $FileMaxLength = 0
-Global $ParamList[17][3] =  [["-n", "--number", "number all output lines"], _
+Global $ParamList[18][3] =  [["-n", "--number", "number all output lines"], _
 							["-e", "--show-ends", "display $ at end of each line"], _
 							["-t", "--show-tabs", "display TAB characters as ^I"], _
 							["-s", "--squeeze-blank", "suppress repeated output lines"], _
@@ -51,6 +51,7 @@ Global $ParamList[17][3] =  [["-n", "--number", "number all output lines"], _
 							["-d", "--debug", "show debug information"], _
 							["-i", "--interactive", "use stdin"], _
 							["-l", "--clip", "copy output to clipboard"], _
+							["-m", "--checksum", "show the checksums of all files"], _
 							["--dec", "--dec", "convert decimal number to hexadecimal and binary"], _
 							["--hex", "--hex", "convert hexadecimal number to decimal and binary"], _
 							["--bin", "--bin", "convert binary number to decimal and hexadecimal"]]
@@ -85,10 +86,19 @@ Func _RunMain()
 		$FileMaxLength = _GetFileMaxLength()
 		Local $iStart = 0
 		Local $iEnd = Ubound($FromFile)-1
-
-		For $i = ($ParamUsage[4] ? $iEnd : $iStart) To ($ParamUsage[4] ? $iStart : $iEnd) Step ($ParamUsage[4] ? -1 : 1)
-			_PrintFile($FromFile[$i], $i == ($ParamUsage[4] ? $iStart : $iEnd), $i+1)
-		Next
+		If $ParamUsage[14] Then
+			For $i = $iStart To $iEnd
+				_COut("Checksum of '" & $FromFile[$i] & "':" & @LF)
+				_COut(@TAB & "CRC32:" & @TAB & _CRC32ForFile($FromFile[$i]) & @LF)
+				_COut(@TAB & "MD4:" & @TAB & _MD4ForFile($FromFile[$i]) & @LF)
+				_COut(@TAB & "MD5:" & @TAB & _MD5ForFile($FromFile[$i]) & @LF)
+				_COut(@TAB & "SHA1:" & @TAB & _SHA1ForFile($FromFile[$i]) & @LF)
+			Next
+		Else
+			For $i = ($ParamUsage[4] ? $iEnd : $iStart) To ($ParamUsage[4] ? $iStart : $iEnd) Step ($ParamUsage[4] ? -1 : 1)
+				_PrintFile($FromFile[$i], $i == ($ParamUsage[4] ? $iStart : $iEnd), $i+1)
+			Next
+		EndIf
 	EndIf
 	If $ParamUsage[12] and FileExists($sTempFile) Then FileDelete($sTempFile) ;cleanup tempfile
 EndFunc
@@ -184,14 +194,14 @@ Func _PrintFile($aFile, $LastFile = False, $fileIndex = 1)
 	For $i = 0 To $fLength-1
 		$iLine = $fContent[$i]
 		$fLineTrimWhitespaces = StringStripWS($iLine, 3)
-		If $ParamUsage[14] and StringIsDigit($fLineTrimWhitespaces) Then
+		If $ParamUsage[15] and StringIsDigit($fLineTrimWhitespaces) Then
 			$iLine &= " {Hexadecimal: " & _DecimalToHex($fLineTrimWhitespaces) & "; Binary: " & _DecimalToBinary($fLineTrimWhitespaces) & "}"
 		EndIf
-		If $ParamUsage[15] Then
+		If $ParamUsage[16] Then
 			$iDecimal = _HexToDecimal($fLineTrimWhitespaces)
 			$iLine &= " {Decimal: " & $iDecimal & "; Binary: " & _DecimalToBinary($iDecimal) & "}"
 		EndIf
-		If $ParamUsage[16] and StringIsDigit($fLineTrimWhitespaces) Then
+		If $ParamUsage[17] and StringIsDigit($fLineTrimWhitespaces) Then
 			$iDecimal = _BinaryToDecimal($fLineTrimWhitespaces)
 			$iLine &= " {Decimal: " & $iDecimal & "; Hexadecimal: " & _DecimalToHex($iDecimal) & "}"
 		EndIf
@@ -419,9 +429,9 @@ Func _CheckForStdIn()
 EndFunc
 
 Func _COut($c)
+	If $ParamUsage[13] Then $ClipBoard &= $c
 	If $ParamUsage[7] Then $c = _WinAPI_WideCharToMultiByte($c, 1, True, False)
 	ConsoleWrite($c)
-	If $ParamUsage[13] Then $ClipBoard &= $c
 EndFunc
 
 Func _IsDirectory($s_file)
