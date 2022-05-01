@@ -76,7 +76,7 @@ No Prerequisites are neccessary; The stand-alone executable `cat.exe` is suffici
 git clone git@github.com:SilenZcience/Cat_For_Windows.git
 cd Cat_For_Windows\bin
 ```
-2. Add the directory to your system-environment variables.
+2. Add the directory to your system-environment `PATH`-variables.
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
