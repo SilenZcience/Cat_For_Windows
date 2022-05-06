@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Change2CUI=y
 #AutoIt3Wrapper_Res_Comment=Simple Command-line Tool made in AutoIt
 #AutoIt3Wrapper_Res_Description=Cat_For_Windows
-#AutoIt3Wrapper_Res_Fileversion=1.0.1.1
+#AutoIt3Wrapper_Res_Fileversion=1.0.1.2
 #AutoIt3Wrapper_Res_ProductName=cat
 #AutoIt3Wrapper_Res_ProductVersion=1.0.0.1
 #AutoIt3Wrapper_Res_Language=1033
@@ -28,7 +28,9 @@ Global $FirstCutOrFirstReverse = -1
 
 Global $ReverseLines = False
 Global $CutLines = False
+Global $ReplaceLines = False
 Global $SplitLinesFromTo[2] = []
+Global $ReplaceSubstringWith[2] = ["", ""]
 
 Global $ReadCreateFile = False
 Global $ReadCreateFileName[0] = []
@@ -119,7 +121,7 @@ Func _SetSettings()
 EndFunc
 
 Func _AddSetting($hParam)
-	If StringRegExp($hParam, "^\[.{2,}\]$") Then ;check for [::-1] or [x:y]
+	If StringRegExp($hParam, "\A\[{1}.*\:{1}.*\]\Z") Then ;check for [::-1] or [x:y]
 		$hParam = StringTrimLeft(StringTrimRight($hParam, 1), 1)
 		If $hParam == "::-1" Then
 			$ReverseLines = True
@@ -134,8 +136,16 @@ Func _AddSetting($hParam)
 			$SplitLinesFromTo[1] = ($hParam[2] = "" ? -1+$SplitLinesFromTo[0] : $hParam[2])
 		EndIf
 		Return True
+	ElseIf StringRegExp($hParam, "\A\[{1}.+\-{1}\>{1}.+\]\Z") Then ;check for [...->...]
+		$hParam = StringSplit(StringMid($hParam, 2, StringLen($hParam)-2), "->", 1)
+		If $hParam[0] <> 2 Then Return False
+		If $hParam[1] == $hParam[2] Then Return True
+		$ReplaceLines = True
+		$ReplaceSubstringWith[0] = $hParam[1]
+		$ReplaceSubstringWith[1] = $hParam[2]
+		Return True
 	EndIf
-
+	
     For $i = 0 To Ubound($ParamList) -1
         If $hParam == $ParamList[$i][0] or $hParam == $ParamList[$i][1] Then 
             $ParamUsage[$i] = True
@@ -193,6 +203,9 @@ Func _PrintFile($aFile, $LastFile = False, $fileIndex = 1)
 	If $ParamUsage[4] Then _ArrayReverse($fContent)
 	For $i = 0 To $fLength-1
 		$iLine = $fContent[$i]
+		If $ParamUsage[6] and $iLine == "" Then ContinueLoop
+		If $ParamUsage[3] and $i > 0 and $iLine == $fContent[$i-1] Then ContinueLoop
+		If $ReplaceLines Then $iLine = StringReplace($iLine, $ReplaceSubstringWith[0], $ReplaceSubstringWith[1])
 		$fLineTrimWhitespaces = StringStripWS($iLine, 3)
 		If $ParamUsage[15] and StringIsDigit($fLineTrimWhitespaces) Then
 			$iLine &= " {Hexadecimal: " & _DecimalToHex($fLineTrimWhitespaces) & "; Binary: " & _DecimalToBinary($fLineTrimWhitespaces) & "}"
@@ -205,8 +218,7 @@ Func _PrintFile($aFile, $LastFile = False, $fileIndex = 1)
 			$iDecimal = _BinaryToDecimal($fLineTrimWhitespaces)
 			$iLine &= " {Decimal: " & $iDecimal & "; Hexadecimal: " & _DecimalToHex($iDecimal) & "}"
 		EndIf
-		If $ParamUsage[6] and $iLine == "" Then ContinueLoop
-		If $ParamUsage[3] and $i > 0 and $iLine == $fContent[$i-1] Then ContinueLoop
+
 		If $ParamUsage[1] Then $iLine = $iLine & "$"
 
 		If $FirstCutOrFirstReverse == 0 Then
@@ -293,6 +305,9 @@ Func _ShowHelp()
 		_PrintHelpIntendation(@TAB & $ParamList[$i][0] & ", " & $ParamList[$i][1])
 		_COut($ParamList[$i][2] & @LF)
 	Next
+	_COut(@LF)
+	_PrintHelpIntendation(@TAB & "'[a->b]':")
+	_COut("replace a with b in every line.")
 	_COut(@LF)
 	_PrintHelpIntendation(@TAB & "[::-1]:")
 	_COut("reverse every line" & @LF)
@@ -404,8 +419,11 @@ Func _Debug()
 	Next
 	_COut("($ReverseLines): " & $ReverseLines & @LF)
 	_COut("($CutLines): " & $CutLines & @LF)
+	_COut("($ReplaceLines): " & $ReplaceLines & @LF)
 	_COut("($SplitLinesFromTo[0]): " & $SplitLinesFromTo[0] & @LF)
 	_COut("($SplitLinesFromTo[1]): " & $SplitLinesFromTo[1] & @LF)
+	_COut("($ReplaceSubstringWith[0]): " & $ReplaceSubstringWith[0] & @LF)
+	_COut("($ReplaceSubstringWith[1]): " & $ReplaceSubstringWith[1] & @LF)
 	_COut(@LF)
 	_COut("Sum of lines from all FILE(s): " & _GetFileLinesSum() & @LF)
 	_COut("String length of linesum: " & _GetFileLineMaxLength() & @LF)
