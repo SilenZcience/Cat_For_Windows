@@ -1,7 +1,11 @@
 Func _DecimalToHex($iNumber)
 	If not IsNumber($iNumber) Then $iNumber = Number($iNumber)
-	$iNumber = Int($iNumber)
-	Return Hex($iNumber)
+    Local $ihex = ""
+    Do
+        $ihex = Hex(Mod($iNumber, 16), 1) & $ihex
+        $iNumber = Floor($iNumber / 16)
+    Until $iNumber = 0
+    Return $ihex
 EndFunc
 
 Func _DecimalToBinary($iNumber)
@@ -17,7 +21,13 @@ Func _DecimalToBinary($iNumber)
 EndFunc
 
 Func _HexToDecimal($iNumber)
-	Return Dec($iNumber)
+    Local $aN, $ihex = 0
+	If StringLeft($iNumber, 2) == "0x" Then $iNumber = StringTrimLeft($iNumber, 2)
+    $aN = StringSplit($iNumber, "", 1)
+    For $x = 1 To UBound($aN) - 1
+        $ihex += Dec($aN[$x]) * (16 ^ (UBound($aN) - 1 - $x))
+    Next
+    Return $ihex
 EndFunc
 
 Func _BinaryToDecimal($iNumber)

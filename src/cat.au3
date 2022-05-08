@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Change2CUI=y
 #AutoIt3Wrapper_Res_Comment=Simple Command-line Tool made in AutoIt
 #AutoIt3Wrapper_Res_Description=Cat_For_Windows
-#AutoIt3Wrapper_Res_Fileversion=1.0.1.3
+#AutoIt3Wrapper_Res_Fileversion=1.0.1.4
 #AutoIt3Wrapper_Res_ProductName=cat
 #AutoIt3Wrapper_Res_ProductVersion=1.0.0.1
 #AutoIt3Wrapper_Res_Language=1033
@@ -137,7 +137,6 @@ Func _AddSetting($hParam)
 		EndIf
 		Return True
 	ElseIf StringRegExp($hParam, "\A\[{1}.+\;{1}.+\]\Z") Then ;check for [...;...]
-		ConsoleWrite("hier")
 		$hParam = StringSplit(StringMid($hParam, 2, StringLen($hParam)-2), ";", 1)
 		If $hParam[0] <> 2 Then
 			$Error = "too many args"
