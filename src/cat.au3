@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Change2CUI=y
 #AutoIt3Wrapper_Res_Comment=Simple Command-line Tool made in AutoIt
 #AutoIt3Wrapper_Res_Description=Cat_For_Windows
-#AutoIt3Wrapper_Res_Fileversion=1.0.1.2
+#AutoIt3Wrapper_Res_Fileversion=1.0.1.3
 #AutoIt3Wrapper_Res_ProductName=cat
 #AutoIt3Wrapper_Res_ProductVersion=1.0.0.1
 #AutoIt3Wrapper_Res_Language=1033
@@ -136,18 +136,22 @@ Func _AddSetting($hParam)
 			$SplitLinesFromTo[1] = ($hParam[2] = "" ? -1+$SplitLinesFromTo[0] : $hParam[2])
 		EndIf
 		Return True
-	ElseIf StringRegExp($hParam, "\A\[{1}.+\-{1}\>{1}.+\]\Z") Then ;check for [...->...]
-		$hParam = StringSplit(StringMid($hParam, 2, StringLen($hParam)-2), "->", 1)
-		If $hParam[0] <> 2 Then Return False
+	ElseIf StringRegExp($hParam, "\A\[{1}.+\;{1}.+\]\Z") Then ;check for [...;...]
+		ConsoleWrite("hier")
+		$hParam = StringSplit(StringMid($hParam, 2, StringLen($hParam)-2), ";", 1)
+		If $hParam[0] <> 2 Then
+			$Error = "too many args"
+			Return False
+		EndIf
 		If $hParam[1] == $hParam[2] Then Return True
 		$ReplaceLines = True
 		$ReplaceSubstringWith[0] = $hParam[1]
 		$ReplaceSubstringWith[1] = $hParam[2]
 		Return True
 	EndIf
-	
+
     For $i = 0 To Ubound($ParamList) -1
-        If $hParam == $ParamList[$i][0] or $hParam == $ParamList[$i][1] Then 
+        If $hParam == $ParamList[$i][0] or $hParam == $ParamList[$i][1] Then
             $ParamUsage[$i] = True
             Return True
         EndIf
@@ -161,24 +165,28 @@ Func _AddSetting($hParam)
                 _AddFileFrom($sFilterFilesArray[$i])
             Next
         EndIf
-    ElseIf not _IsDirectory($sFile) Then ;if it is not a directory
+		Return True
+	ElseIf not _IsDirectory($sFile) Then ;if it is not a directory
         If FileExists($sFile) Then
             _AddFileFrom($sFile)
         ElseIf StringLeft($hParam, 1) == "-" and StringLen($hParam) > 2 Then ;if the $hParam concatenates multiple known params
             For $i = 2 To StringLen($hParam)
                 If not _AddSetting("-" & StringMid($hParam, $i, 1)) Then Return False ;recursively check the params
-            Next
-        ElseIf StringRegExp($hParam, "\A[^-]+\Z") Then ; anything(1ormore) between start and end of string
+			Next
+		ElseIf StringRegExp($hParam, "\A[^-]+\Z") Then ; anything(1ormore) between start and end of string
             _AddFileReadCreate($sFile) ;unknown file we can write
         Else
             $Error = "The element '" & $hParam & "' is not supported!"
             Return False
         EndIf
-    Else
+		Return True
+    ElseIf _IsDirectory($sFile) Then
         $Error = "'" & $hParam & "' is an existing directory!"
-        Return False
-    EndIf
-	Return True
+	Else
+		$Error = "'" & $hParam & "' is not a valid parameter."
+	EndIf
+
+	Return False
 EndFunc
 
 Func _AddFileFrom($sFile)
@@ -306,8 +314,8 @@ Func _ShowHelp()
 		_COut($ParamList[$i][2] & @LF)
 	Next
 	_COut(@LF)
-	_PrintHelpIntendation(@TAB & "'[a->b]':")
-	_COut("replace a with b in every line.")
+	_PrintHelpIntendation(@TAB & "'[a;b]':")
+	_COut("replace a with b in every line." & @LF)
 	_COut(@LF)
 	_PrintHelpIntendation(@TAB & "[::-1]:")
 	_COut("reverse every line" & @LF)
