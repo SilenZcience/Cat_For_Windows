@@ -1,9 +1,11 @@
+import pyperclip3 as pc
 from os.path import getctime, realpath
 from datetime import datetime
 from itertools import groupby  
 from util import parseArg
 import util.StdInHelper as StdInHelper
 from util.ArgConstants import *
+from util.checksum import *
 
 class Holder():
     files = []
@@ -13,6 +15,7 @@ class Holder():
     fileCount = 0
     fileLineMaxLength = 0
     fileMaxLength = 0
+    clipBoard = ""
     
 def _showHelp():
     print("Usage: cat [FILE]... [OPTION]...")
@@ -71,7 +74,7 @@ def _getLineWithPrefix(holder, index, line_num):
     
     return file_prefix + line_prefix
     
-def printFile(holder, lastFile=False, fileIndex = 1):
+def printFile(holder, fileIndex = 1):
     content = []
     with open(holder.files[fileIndex-1], 'r', encoding='utf-8') as f:
         content = f.read().splitlines()
@@ -85,6 +88,8 @@ def printFile(holder, lastFile=False, fileIndex = 1):
             content = [c.replace("\t", "^I") for c in content]
         if arg == 4:
             content = [g[0] for g in groupby(content)]
+        if arg == 5:
+            content.reverse()
         if arg == 7:
             content = [c for c in content if c]
         # if arg == 13:
@@ -99,6 +104,8 @@ def printFile(holder, lastFile=False, fileIndex = 1):
             replace_values = holder.args[i][1][1:-1].split(";")
             content = [c.replace(replace_values[0], replace_values[1]) for c in content]
     print(*content, sep="\n")
+    if 11 in holder.args_id:
+        holder.clipBoard += "\n".join(content)
 
 
 def printFiles(holder):
@@ -111,10 +118,14 @@ def printFiles(holder):
     start = len(holder.files)-1 if reversed else 0
     end = -1 if reversed else len(holder.files)
     if 12 in holder.args_id:
-        print("CHECKSUM!") #TODO
+        for file in holder.files:
+            print("Checksum of '" + file + "':")
+            print(getChecksumFromFile(file))
     else:
         for i in range(start, end, -1 if reversed else 1):
-            printFile(holder, i == end, i+1)
+            printFile(holder, i+1)
+        if 11 in holder.args_id:
+            pc.copy(holder.clipBoard)
             
 
 def main():
