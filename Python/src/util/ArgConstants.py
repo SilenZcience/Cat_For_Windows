@@ -37,9 +37,9 @@ ALL_ARGS = [[["-h", "--help"], "show this help message and exit", ARGS_HELP],
             [["-i", "--interactive"], "use stdin", ARGS_INTERACTIVE],
             [["-l", "--clip"], "copy output to clipboard", ARGS_CLIP],
             [["-m", "--checksum"], "show the checksums of all files", ARGS_CHECKSUM],
-            [["--dec", "--dec"], "convert decimal number to hexadecimal and binary", ARGS_DEC],
-            [["--hex", "--hex"], "convert hexadecimal number to decimal and binary", ARGS_HEX],
-            [["--bin", "--bin"], "convert binary number to decimal and hexadecimal", ARGS_BIN],
+            [["-dec", "--dec"], "convert decimal number to hexadecimal and binary", ARGS_DEC],
+            [["-hex", "--hex"], "convert hexadecimal number to decimal and binary", ARGS_HEX],
+            [["-bin", "--bin"], "convert binary number to decimal and hexadecimal", ARGS_BIN],
             [["-v", "--version"], "output version information and exit", ARGS_VERSION],
             [["-d", "--debug"], "show debug information", ARGS_DEBUG]]
 

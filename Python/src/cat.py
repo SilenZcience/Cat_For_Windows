@@ -2,11 +2,12 @@ import pyperclip3 as pc
 from os import remove
 from os.path import getctime, realpath, exists
 from datetime import datetime
-from itertools import groupby  
+from itertools import groupby
 from util.StdInHelper import *
 from util.parseArg import *
 from util.ArgConstants import *
 from util.checksum import *
+from util.Converter import _fromDEC, _fromHEX, _fromBIN, is_decimal, is_hex, is_bin
 
 class Holder():
     files = []
@@ -93,12 +94,21 @@ def printFile(holder, fileIndex = 1):
             content.reverse()
         if arg == ARGS_BLANK:
             content = [c for c in content if c]
-        # if arg == 13:
-        #     #TODO
-        # if arg == 14:
-        #     #TODO
-        # if arg == 15:
-        #     #TODO
+        if arg == ARGS_DEC:
+            if holder.args[i][1] == "-dec":
+                content = [_fromDEC(int(c), True) for c in content if is_decimal(c)]
+            else:
+                content = [_fromDEC(int(c)) for c in content if is_decimal(c)]
+        if arg == ARGS_HEX:
+            if holder.args[i][1] == "-hex":
+                content = [_fromHEX(c, True) for c in content if is_hex(c)]
+            else:
+                content = [_fromHEX(c) for c in content if is_hex(c)]
+        if arg == ARGS_BIN:
+            if holder.args[i][1] == "-bin":
+                content = [_fromBIN(c, True) for c in content if is_bin(c)]
+            else:
+                content = [_fromBIN(c) for c in content if is_bin(c)]
         if arg == HIGHEST_ARG_ID+1:
             content = [eval(repr(c) + holder.args[i][1]) for c in content]
         if arg == HIGHEST_ARG_ID+2:
