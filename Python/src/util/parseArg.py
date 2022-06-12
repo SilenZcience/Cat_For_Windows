@@ -45,7 +45,6 @@ def getArguments():
     known_files = []
     unknown_files = []
     
-    for i in range(1, len(inputArgs)):
-        addArgument(args, known_files, unknown_files, inputArgs[i])
+    for i in range(1, len(inputArgs)): addArgument(args, known_files, unknown_files, inputArgs[i])
         
     return (args, known_files, unknown_files)

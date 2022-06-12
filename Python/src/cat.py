@@ -47,15 +47,14 @@ def main():
         _showHelp()
     if 16 in args_id:
         _showVersion()
-    if 10 in args_id:
-        piped_input = StdInHelper.addPipedStdIn(known_files)
     if 17 in args_id:
         _showDebug(args, known_files, unknown_files)
-    if len(unknown_files) > 0:
-        if 10 in args_id:
-            StdInHelper.writeFromStdIn(unknown_files, piped_input)
-        else:
-            StdInHelper.readWriteFromStdIn(unknown_files, piped_input)
+    if 10 in args_id:
+        piped_input = StdInHelper.addPipedStdIn()
+        StdInHelper.writeFromStdIn(unknown_files, piped_input)
+    else:
+        StdInHelper.readWriteFromStdIn(unknown_files)
+            
     print(args_id)
 
     
