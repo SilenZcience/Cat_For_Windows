@@ -1,6 +1,12 @@
 from sys import stdin
 from tempfile import NamedTemporaryFile
 
+def writeTemp(content):
+    tmp_file = NamedTemporaryFile(delete=False).name
+    with open(tmp_file, 'w', encoding='utf-8') as f:
+        f.write(content)
+    return tmp_file
+
 def addPipedStdIn():
     input = ""
     for line in stdin:

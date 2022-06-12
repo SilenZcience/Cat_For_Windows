@@ -1,9 +1,19 @@
 from os.path import getctime, realpath
 from datetime import datetime
+from itertools import groupby  
 from util import parseArg
 import util.StdInHelper as StdInHelper
 from util.ArgConstants import *
 
+class Holder():
+    files = []
+    args = []
+    args_id = []
+    lineSum = 0
+    fileCount = 0
+    fileLineMaxLength = 0
+    fileMaxLength = 0
+    
 def _showHelp():
     print("Usage: cat [FILE]... [OPTION]...")
     print("Concatenate FILE(s) to standard output.")
@@ -38,28 +48,96 @@ def _showDebug(args, known_files, unknown_files):
     print(known_files)
     print("unknown_files:", end="")
     print(unknown_files)
+
+def _getFileLinesSum(files):
+    return sum([sum(1 for _ in open(file)) for file in files])
+
+def _getFileLineMaxLength(holder):
+    return len(str(holder.fileCount)) if 5 in holder.args_id else len(str(holder.lineSum))
+
+def _getFileMaxLength(files):
+    return len(str(len(files)))
+
+def _getLineWithPrefix(holder, index, line_num):
+    line_prefix = str(line_num) + ")  "
+    for i in range(len(str(line_num)), holder.fileLineMaxLength-1):
+        line_prefix += " "
+    file_prefix = ""
+    if len(holder.files) > 1:
+        file_prefix += str(index)
+        for i in range(len(str(index)), holder.fileMaxLength-1):
+            file_prefix += " "
+        file_prefix += "."
     
+    return file_prefix + line_prefix
+    
+def printFile(holder, lastFile=False, fileIndex = 1):
+    content = []
+    with open(holder.files[fileIndex-1], 'r', encoding='utf-8') as f:
+        content = f.read().splitlines()
+    length = len(content)
+    for i, arg in enumerate(holder.args_id):
+        if arg == 1:
+            content = [_getLineWithPrefix(holder, fileIndex, holder.fileCount-i if 5 in holder.args_id else holder.fileCount+i+1) + c for i, c in enumerate(content)]
+        if arg == 2:
+            content = [c + "$" for c in content]
+        if arg == 3:
+            content = [c.replace("\t", "^I") for c in content]
+        if arg == 4:
+            content = [g[0] for g in groupby(content)]
+        if arg == 7:
+            content = [c for c in content if c]
+        # if arg == 13:
+        #     #TODO
+        # if arg == 14:
+        #     #TODO
+        # if arg == 15:
+        #     #TODO
+        if arg == HIGHEST_ARG_ID+1:
+            content = [eval(repr(c) + holder.args[i][1]) for c in content]
+        if arg == HIGHEST_ARG_ID+2:
+            replace_values = holder.args[i][1][1:-1].split(";")
+            content = [c.replace(replace_values[0], replace_values[1]) for c in content]
+    print(*content, sep="\n")
+
+
+def printFiles(holder):
+    reversed = 5 in holder.args_id
+    holder.lineSum = _getFileLinesSum(holder.files)
+    holder.fileCount = holder.lineSum if reversed else 0
+    holder.fileLineMaxLength = _getFileLineMaxLength(holder)
+    
+    holder.fileMaxLength = _getFileMaxLength(holder.files)
+    start = len(holder.files)-1 if reversed else 0
+    end = -1 if reversed else len(holder.files)
+    if 12 in holder.args_id:
+        print("CHECKSUM!") #TODO
+    else:
+        for i in range(start, end, -1 if reversed else 1):
+            printFile(holder, i == end, i+1)
+            
+
 def main():
+    holder = Holder()
     piped_input = ""
-    args, known_files, unknown_files = parseArg.getArguments()
-    args_id = [x[0] for x in args]
-    if (len(known_files) == 0 and len(unknown_files) == 0) or 0 in args_id:
+    holder.args, known_files, unknown_files = parseArg.getArguments()
+    holder.args_id = [x[0] for x in holder.args]
+    if (len(known_files) == 0 and len(unknown_files) == 0) or 0 in holder.args_id:
         _showHelp()
-    if 16 in args_id:
+    if 16 in holder.args_id:
         _showVersion()
-    if 17 in args_id:
-        _showDebug(args, known_files, unknown_files)
-    if 10 in args_id:
+    if 17 in holder.args_id:
+        _showDebug(holder.args, known_files, unknown_files)
+    if 10 in holder.args_id:
         piped_input = StdInHelper.addPipedStdIn()
+        known_files.append(StdInHelper.writeTemp(piped_input))
         StdInHelper.writeFromStdIn(unknown_files, piped_input)
     else:
         StdInHelper.readWriteFromStdIn(unknown_files)
-            
-    print(args_id)
-
     
+    holder.files = [*known_files, *unknown_files]
     
-    
+    printFiles(holder)
     
 if __name__ == "__main__":
     main()
