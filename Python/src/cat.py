@@ -3,6 +3,8 @@ from os import remove
 from os.path import getctime, realpath, exists
 from datetime import datetime
 from itertools import groupby
+from sys import executable
+from sys import exit as sysexit
 from util.StdInHelper import *
 from util.parseArg import *
 from util.ArgConstants import *
@@ -32,7 +34,7 @@ def _showHelp():
     print("Examples:")
     print("%-25s" % str("\tcat f g -r"), end="Output g's contents in reverse order, then f's content in reverse order\n")
     print("%-25s" % str("\tcat f g -ne"), end="Output f's, then g's content, while numerating and showing the end of lines.\n")
-    exit()
+    sysexit(0)
 
 def _showVersion():
     print()
@@ -41,9 +43,9 @@ def _showVersion():
     print("------------------------------------------------------------")
     print()
     print("Python: \t 3.10.0 (tags/v3.10.0:b494f59, Oct  4 2021, 19:00:18) [MSC v.1929 64 bit (AMD64)]") #sys.version
-    print("Build time: \t " + str(datetime.fromtimestamp(getctime(realpath(__file__)))) + " CET")
+    print("Build time: \t " + str(datetime.fromtimestamp(getctime(realpath(executable)))) + " CET")
     print("Author: \t Silas A. Kraume")
-    exit()
+    sysexit(0)
 
 def _showDebug(args, known_files, unknown_files):
     print("Debug Information:")
@@ -150,7 +152,7 @@ def main():
     piped_input = temp_file = ""
     holder.args, known_files, unknown_files = getArguments()
     holder.args_id = [x[0] for x in holder.args]
-    if (len(known_files) == 0 and len(unknown_files) == 0) or ARGS_HELP in holder.args_id:
+    if (len(known_files) == 0 and len(unknown_files) == 0 and len(holder.args) == 0) or ARGS_HELP in holder.args_id:
         _showHelp()
     if ARGS_VERSION in holder.args_id:
         _showVersion()
