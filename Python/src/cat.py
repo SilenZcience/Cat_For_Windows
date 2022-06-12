@@ -175,3 +175,4 @@ def main():
     
 if __name__ == "__main__":
     main()
+#pyinstaller cat.py --onefile --clean --dist ../bin
