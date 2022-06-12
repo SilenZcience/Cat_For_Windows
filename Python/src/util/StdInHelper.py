@@ -3,7 +3,7 @@ from tempfile import NamedTemporaryFile
 
 def writeTemp(content):
     tmp_file = NamedTemporaryFile(delete=False).name
-    with open(tmp_file, 'w', encoding='utf-8') as f:
+    with open(tmp_file, 'w') as f:
         f.write(content)
     return tmp_file
 
@@ -15,7 +15,7 @@ def addPipedStdIn():
     
 def writeFromStdIn(unknown_files, piped_input):
     for file in unknown_files:
-        with open(file, 'w', encoding="utf-8") as f:
+        with open(file, 'w') as f:
             f.write(piped_input)
     
     

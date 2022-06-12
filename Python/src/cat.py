@@ -39,7 +39,7 @@ def _showHelp():
 def _showVersion():
     print()
     print("------------------------------------------------------------")
-    print("Cat 1.4.1.6")
+    print("Cat 1.4.1.7")
     print("------------------------------------------------------------")
     print()
     print("Python: \t 3.10.0 (tags/v3.10.0:b494f59, Oct  4 2021, 19:00:18) [MSC v.1929 64 bit (AMD64)]") #sys.version
@@ -80,7 +80,7 @@ def _getLineWithPrefix(holder, index, line_num):
     
 def printFile(holder, fileIndex = 1):
     content = []
-    with open(holder.files[fileIndex-1], 'r', encoding='utf-8') as f:
+    with open(holder.files[fileIndex-1], 'r') as f:
         content = f.read().splitlines()
     length = len(content)
     for i, arg in enumerate(holder.args_id):
