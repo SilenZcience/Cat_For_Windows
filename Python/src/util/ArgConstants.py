@@ -13,7 +13,6 @@ ARGS_SQUEEZE = 4
 ARGS_REVERSE = 5
 ARGS_COUNT = 6
 ARGS_BLANK = 7
-ARGS_OEM = 8
 ARGS_FILES = 9
 ARGS_INTERACTIVE = 10
 ARGS_CLIP = 11
@@ -32,7 +31,6 @@ ALL_ARGS = [[["-h", "--help"], "show this help message and exit", ARGS_HELP],
             [["-r", "--reverse"], "reverse output", ARGS_REVERSE],
             [["-c", "--count"], "show sum of lines", ARGS_COUNT],
             [["-b", "--blank"], "hide empty lines", ARGS_BLANK],
-            [["-o", "--oem"], "read/write in oem-text-encoding", ARGS_OEM],
             [["-f", "--files"], "list applied files", ARGS_FILES],
             [["-i", "--interactive"], "use stdin", ARGS_INTERACTIVE],
             [["-l", "--clip"], "copy output to clipboard", ARGS_CLIP],
