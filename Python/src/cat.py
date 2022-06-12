@@ -176,3 +176,6 @@ def main():
 if __name__ == "__main__":
     main()
 #pyinstaller cat.py --onefile --clean --dist ../bin
+
+#TODO: catch unsupported file encoding exception
+#TODO: update README
