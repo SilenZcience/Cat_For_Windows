@@ -6,10 +6,10 @@ from itertools import groupby
 from sys import executable
 from sys import exit as sysexit
 from util.StdInHelper import *
-from util.parseArg import *
+from util.ArgParser import *
 from util.ArgConstants import *
-from util.checksum import *
-from util.Converter import _fromDEC, _fromHEX, _fromBIN, is_decimal, is_hex, is_bin
+import util.Checksum as Checksum
+import util.Converter as Converter
 
 class Holder():
     files = []
@@ -22,6 +22,7 @@ class Holder():
     clipBoard = ""
     
 holder = Holder()
+converter = Converter.Converter()
 
 def _showHelp():
     print("Usage: cat [FILE]... [OPTION]...")
@@ -123,19 +124,19 @@ def printFile(fileIndex = 1):
             content = [c for c in content if c]
         if arg == ARGS_DEC:
             if holder.args[i][1] == "-dec":
-                content = [_fromDEC(int(c), True) for c in content if is_decimal(c)]
+                content = [converter._fromDEC(int(c), True) for c in content if converter.is_decimal(c)]
             else:
-                content = [_fromDEC(int(c)) for c in content if is_decimal(c)]
+                content = [converter._fromDEC(int(c)) for c in content if converter.is_decimal(c)]
         if arg == ARGS_HEX:
             if holder.args[i][1] == "-hex":
-                content = [_fromHEX(c, True) for c in content if is_hex(c)]
+                content = [converter._fromHEX(c, True) for c in content if converter.is_hex(c)]
             else:
-                content = [_fromHEX(c) for c in content if is_hex(c)]
+                content = [converter._fromHEX(c) for c in content if converter.is_hex(c)]
         if arg == ARGS_BIN:
             if holder.args[i][1] == "-bin":
-                content = [_fromBIN(c, True) for c in content if is_bin(c)]
+                content = [converter._fromBIN(c, True) for c in content if converter.is_bin(c)]
             else:
-                content = [_fromBIN(c) for c in content if is_bin(c)]
+                content = [converter._fromBIN(c) for c in content if converter.is_bin(c)]
         if arg == HIGHEST_ARG_ID+1:
             content = [eval(repr(c) + holder.args[i][1]) for c in content]
         if arg == HIGHEST_ARG_ID+2:
@@ -158,7 +159,7 @@ def printFiles():
     if ARGS_CHECKSUM in holder.args_id:
         for file in holder.files:
             print("Checksum of '" + file + "':")
-            print(getChecksumFromFile(file))
+            print(Checksum.getChecksumFromFile(file))
     else:
         for i in range(start, end, -1 if reversed else 1):
             printFile(i+1)

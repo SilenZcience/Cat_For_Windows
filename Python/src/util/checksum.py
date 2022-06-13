@@ -1,7 +1,6 @@
 import hashlib
 from zlib import crc32 as crc32_hash
 
-
 def getChecksumFromFile(file):
     BUF_SIZE = 65536 #64kb
     md5 = hashlib.md5()
