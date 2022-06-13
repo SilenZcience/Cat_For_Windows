@@ -1,7 +1,13 @@
 import hashlib
 from zlib import crc32 as crc32_hash
 
-def getChecksumFromFile(file):
+def getChecksumFromFile(file: str):
+    """
+    Takes a filepath of type String and
+    returns a String representation of the
+    CRC32, MD5, SHA1, SHA256, SHA512
+    hashes corresponding to the given file.
+    """
     BUF_SIZE = 65536 #64kb
     md5 = hashlib.md5()
     sha1 = hashlib.sha1()

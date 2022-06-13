@@ -4,7 +4,7 @@ from re import match
 from os.path import isfile, realpath, isdir, isfile
 from .ArgConstants import *
 
-def addArgument(args, known_files, unknown_files, param):
+def __addArgument__(args, known_files, unknown_files, param):
     if match("\A\[.*\:.*\]\Z", param):
         args.append([HIGHEST_ARG_ID+1, param])
         return
@@ -45,6 +45,6 @@ def getArguments():
     known_files = []
     unknown_files = []
     
-    for i in range(1, len(inputArgs)): addArgument(args, known_files, unknown_files, inputArgs[i])
+    for i in range(1, len(inputArgs)): __addArgument__(args, known_files, unknown_files, inputArgs[i])
         
     return (args, known_files, unknown_files)
