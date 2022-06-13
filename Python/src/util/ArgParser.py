@@ -35,7 +35,7 @@ def __addArgument__(args, known_files, unknown_files, param):
         return
     elif param[0] == "-" and len(param) > 2:
         for i in range(1, len(param)):
-            addArgument(args, known_files, unknown_files, "-" + param[i])
+            __addArgument__(args, known_files, unknown_files, "-" + param[i])
     elif match("\A[^-]+\Z", param):
         unknown_files.append(realpath(param))
 
