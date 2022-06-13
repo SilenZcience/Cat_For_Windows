@@ -10,7 +10,7 @@
    <p align="center">
       Simple Command-line Tool made in AutoIt
       <br/>
-      <a href="https://github.com/SilenZcience/Cat_For_Windows/blob/main/src/cat.au3">
+      <a href="https://github.com/SilenZcience/Cat_For_Windows/blob/main/Python/src/cat.py">
          <strong>Explore the code »</strong>
       </a>
       <br/>
