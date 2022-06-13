@@ -34,7 +34,7 @@ def _showHelp():
 def _showVersion():
     print()
     print("------------------------------------------------------------")
-    print("Cat 1.4.1.8")
+    print("Cat 1.4.1.9")
     print("------------------------------------------------------------")
     print()
     print("Python: \t 3.10.0 (tags/v3.10.0:b494f59, Oct  4 2021, 19:00:18) [MSC v.1929 64 bit (AMD64)]") #sys.version
@@ -52,16 +52,17 @@ def _showDebug(args, known_files, unknown_files):
     print(unknown_files)
 
 def _getLinePrefix(index, line_num):
-    line_prefix = str(line_num) + ")  "
-    for i in range(len(str(line_num)), holder.fileLineMaxLength-1):
+    line_prefix = str(line_num) + ") "
+    for i in range(len(str(line_num)), holder.fileLineMaxLength):
         line_prefix += " "
+    
     file_prefix = ""
     if len(holder.files) > 1:
         file_prefix += str(index)
-        for i in range(len(str(index)), holder.fileMaxLength-1):
+        for i in range(len(str(index)), holder.fileMaxLength):
             file_prefix += " "
         file_prefix += "."
-    
+        
     return file_prefix + line_prefix
     
 def printFile(fileIndex = 1):
@@ -80,10 +81,11 @@ def printFile(fileIndex = 1):
         except:
             print("Operation failed!")
             return
-
+    fLength = len(content)
     for i, arg in enumerate(holder.args_id):
         if arg == ARGS_NUMBER:
             content = [_getLinePrefix(fileIndex, holder.fileCount-i if holder.reversed else holder.fileCount+i+1) + c for i, c in enumerate(content)]
+            holder.fileCount += (-fLength if holder.reversed else fLength)
         if arg == ARGS_ENDS:
             content = [c + "$" for c in content]
         if arg == ARGS_TABS:
@@ -114,6 +116,7 @@ def printFile(fileIndex = 1):
         if arg == HIGHEST_ARG_ID+2:
             replace_values = holder.args[i][1][1:-1].split(";")
             content = [c.replace(replace_values[0], replace_values[1]) for c in content]
+    
     print(*content, sep="\n")
     if ARGS_CLIP in holder.args_id:
         holder.clipBoard += "\n".join(content)
