@@ -21,6 +21,8 @@ class Holder():
     fileMaxLength = 0
     clipBoard = ""
     
+holder = Holder()
+
 def _showHelp():
     print("Usage: cat [FILE]... [OPTION]...")
     print("Concatenate FILE(s) to standard output.")
@@ -56,16 +58,28 @@ def _showDebug(args, known_files, unknown_files):
     print("unknown_files:", end="")
     print(unknown_files)
 
-def _getFileLinesSum(files):
-    return sum([sum(1 for _ in open(file)) for file in files])
+def _count_generator(reader):
+    b = reader(1024 * 1024)
+    while b:
+        yield b
+        b = reader(1024 * 1024)
 
-def _getFileLineMaxLength(holder):
+def _getFileLinesSum(file):
+    with open(file, 'rb') as fp:
+        c_generator = _count_generator(fp.raw.read)
+        count = sum(buffer.count(b'\n') for buffer in c_generator)
+        return count + 1
+
+def _getFilesLinesSum():
+    return sum([_getFileLinesSum(file) for file in holder.files])
+
+def _getFileLineMaxLength():
     return len(str(holder.fileCount)) if ARGS_REVERSE in holder.args_id else len(str(holder.lineSum))
 
-def _getFileMaxLength(files):
-    return len(str(len(files)))
+def _getFileMaxLength():
+    return len(str(len(holder.files)))
 
-def _getLineWithPrefix(holder, index, line_num):
+def _getLineWithPrefix(index, line_num):
     line_prefix = str(line_num) + ")  "
     for i in range(len(str(line_num)), holder.fileLineMaxLength-1):
         line_prefix += " "
@@ -78,14 +92,25 @@ def _getLineWithPrefix(holder, index, line_num):
     
     return file_prefix + line_prefix
     
-def printFile(holder, fileIndex = 1):
+def printFile(fileIndex = 1):
     content = []
-    with open(holder.files[fileIndex-1], 'r') as f:
-        content = f.read().splitlines()
+    try:
+        with open(holder.files[fileIndex-1], 'r') as f:
+            content = f.read().splitlines()
+    except:
+        print("failed!", holder.files[fileIndex-1])
+        inp = input("Do you want to open the file as a binary?")
+        if not 'y' in inp and not 'Y' in inp: return
+        try:
+            with open(holder.files[fileIndex-1], 'rb') as f:
+                content = f.read().splitlines()
+        except:
+            print("Operation failed!")
+            return
     length = len(content)
     for i, arg in enumerate(holder.args_id):
         if arg == ARGS_NUMBER:
-            content = [_getLineWithPrefix(holder, fileIndex, holder.fileCount-i if ARGS_REVERSE in holder.args_id else holder.fileCount+i+1) + c for i, c in enumerate(content)]
+            content = [_getLineWithPrefix(fileIndex, holder.fileCount-i if ARGS_REVERSE in holder.args_id else holder.fileCount+i+1) + c for i, c in enumerate(content)]
         if arg == ARGS_ENDS:
             content = [c + "$" for c in content]
         if arg == ARGS_TABS:
@@ -121,13 +146,13 @@ def printFile(holder, fileIndex = 1):
         holder.clipBoard += "\n".join(content)
 
 
-def printFiles(holder):
+def printFiles():
     reversed = ARGS_REVERSE in holder.args_id
-    holder.lineSum = _getFileLinesSum(holder.files)
+    holder.lineSum = _getFilesLinesSum()
     holder.fileCount = holder.lineSum if reversed else 0
-    holder.fileLineMaxLength = _getFileLineMaxLength(holder)
+    holder.fileLineMaxLength = _getFileLineMaxLength()
     
-    holder.fileMaxLength = _getFileMaxLength(holder.files)
+    holder.fileMaxLength = _getFileMaxLength()
     start = len(holder.files)-1 if reversed else 0
     end = -1 if reversed else len(holder.files)
     if ARGS_CHECKSUM in holder.args_id:
@@ -136,7 +161,7 @@ def printFiles(holder):
             print(getChecksumFromFile(file))
     else:
         for i in range(start, end, -1 if reversed else 1):
-            printFile(holder, i+1)
+            printFile(i+1)
         if ARGS_COUNT in holder.args_id:
             print()
             print("Lines: " + str(holder.lineSum))
@@ -148,7 +173,6 @@ def printFiles(holder):
             pc.copy(holder.clipBoard)
             
 def main():
-    holder = Holder()
     piped_input = temp_file = ""
     holder.args, known_files, unknown_files = getArguments()
     holder.args_id = [x[0] for x in holder.args]
@@ -168,7 +192,7 @@ def main():
     
     holder.files = [*known_files, *unknown_files]
     
-    printFiles(holder)
+    printFiles()
     
     if exists(temp_file):
         remove(temp_file)
@@ -177,5 +201,4 @@ if __name__ == "__main__":
     main()
 #pyinstaller cat.py --onefile --clean --dist ../bin
 
-#TODO: catch unsupported file encoding exception
 #TODO: update README

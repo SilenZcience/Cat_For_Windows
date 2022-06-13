@@ -18,7 +18,6 @@ def writeFromStdIn(unknown_files, piped_input):
         with open(file, 'w') as f:
             f.write(piped_input)
     
-    
 def readWriteFromStdIn(unknown_files):
     if len(unknown_files) == 0: return
     print("The given FILE(s)", end="")
