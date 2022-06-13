@@ -1,6 +1,8 @@
 <div id="top"></div>
 
-[![Linux][OS-Windows]][OS-Windows]
+[![OS-Windows]][OS-Windows]
+[![OS-Linux]][OS-Linux]
+[![OS-MacOS]][OS-MacOS]
 
 <br/>
 <div align="center">
@@ -50,10 +52,11 @@
 This project copies the fundamental framework of the cat command-line tool from linux and translates its features to
 a windows executable file.
 
-Additionally it includes the feature to strip and reverse the content of any given file, make use of the standard-input, which enables cat piping into each other, and even convert decimal, hexadecimal and binary numbers within any text.
+Additionally it includes the feature to strip and reverse the content of any given file, make use of the standard-input, which enables cat piping into each other, generating che checksum of any file, and even convert decimal, hexadecimal and binary numbers within any text.
 
 ### Made With
 [![AutoIt][MadeWith-AutoIt]](https://www.autoitscript.com/site)
+[![Python][MadeWith-Python]](https://www.python.org/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -69,12 +72,17 @@ No Prerequisites are neccessary; The stand-alone executable `cat.exe` is suffici
 
 ### Installation
 
-1. Clone the repository and move into the root\bin directory with:
+1. Clone the repository and move into the root\AutoIt\bin directory with:
 
 
 ```console
 git clone git@github.com:SilenZcience/Cat_For_Windows.git
-cd Cat_For_Windows\bin
+cd Cat_For_Windows\AutoIt\bin
+```
+or use the python version with:
+```console
+git clone git@github.com:SilenZcience/Cat_For_Windows.git
+cd Cat_For_Windows\Python\bin
 ```
 2. Add the directory to your system-environment `PATH`-variables.
 
@@ -105,8 +113,11 @@ cat --help
 [![GitHub-SilenZcience][GitHub-SilenZcience]](https://github.com/SilenZcience)
 
 [OS-Windows]: https://svgshare.com/i/ZhY.svg
+[OS-Linux]: https://svgshare.com/i/Zhy.svg
+[OS-MacOS]: https://svgshare.com/i/ZjP.svg
 
 [MadeWith-AutoIt]: https://img.shields.io/badge/Made%20with-AutoIt-brightgreen
+[MadeWith-Python]: https://img.shields.io/badge/Made%20with-Python-brightgreen
 
 [Warning]: https://img.shields.io/badge/warning-orange?style=for-the-badge
 

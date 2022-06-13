@@ -51,7 +51,7 @@ def _showDebug(args, known_files, unknown_files):
     print("unknown_files:", end="")
     print(unknown_files)
 
-def _getLineWithPrefix(index, line_num):
+def _getLinePrefix(index, line_num):
     line_prefix = str(line_num) + ")  "
     for i in range(len(str(line_num)), holder.fileLineMaxLength-1):
         line_prefix += " "
@@ -70,8 +70,9 @@ def printFile(fileIndex = 1):
         with open(holder.files[fileIndex-1], 'r') as f:
             content = f.read().splitlines()
     except:
-        print("failed!", holder.files[fileIndex-1])
-        inp = input("Do you want to open the file as a binary?")
+        print("Failed to open:", holder.files[fileIndex-1])
+        print("Do you want to open the file as a binary?")
+        inp = input()
         if not 'y' in inp and not 'Y' in inp: return
         try:
             with open(holder.files[fileIndex-1], 'rb') as f:
@@ -82,7 +83,7 @@ def printFile(fileIndex = 1):
 
     for i, arg in enumerate(holder.args_id):
         if arg == ARGS_NUMBER:
-            content = [_getLineWithPrefix(fileIndex, holder.fileCount-i if holder.reversed else holder.fileCount+i+1) + c for i, c in enumerate(content)]
+            content = [_getLinePrefix(fileIndex, holder.fileCount-i if holder.reversed else holder.fileCount+i+1) + c for i, c in enumerate(content)]
         if arg == ARGS_ENDS:
             content = [c + "$" for c in content]
         if arg == ARGS_TABS:

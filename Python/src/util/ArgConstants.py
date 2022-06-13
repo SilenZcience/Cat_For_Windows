@@ -42,4 +42,4 @@ ALL_ARGS = [[["-h", "--help"], "show this help message and exit", ARGS_HELP],
             [["-d", "--debug"], "show debug information", ARGS_DEBUG]]
 
 ALL_ARGS = [ArgConstant(x[0][0], x[0][1], x[1], x[2]) for x in ALL_ARGS]
-HIGHEST_ARG_ID = len(ALL_ARGS)-1
+HIGHEST_ARG_ID = max([m.id for m in ALL_ARGS])
