@@ -112,7 +112,11 @@ def printFile(fileIndex = 1):
             else:
                 content = [converter._fromBIN(c) for c in content if converter.is_bin(c)]
         if arg == HIGHEST_ARG_ID+1:
-            content = [eval(repr(c) + holder.args[i][1]) for c in content]
+            try:
+                content = [eval(repr(c) + holder.args[i][1]) for c in content]
+            except:
+                print("Error at operation: ", holder.args[i][1])
+                return
         if arg == HIGHEST_ARG_ID+2:
             replace_values = holder.args[i][1][1:-1].split(";")
             content = [c.replace(replace_values[0], replace_values[1]) for c in content]
