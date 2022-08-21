@@ -1,7 +1,7 @@
 from sys import argv
 from glob import iglob
 from re import match
-from os.path import isfile, realpath, isdir, isfile
+from os.path import isfile, realpath, isdir
 from .ArgConstants import *
 
 def __addArgument__(args, known_files, unknown_files, param):

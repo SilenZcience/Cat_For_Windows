@@ -23,11 +23,14 @@ def getStdInContent():
 def writeFiles(file_list: list, content: str):
     """
     Simply writes the content into every
-    file in the given list.
+    file in the given list if there is a
+    valid content.
     """
+    if content == "": file_list.clear()
     for file in file_list:
         with open(file, 'w') as f:
             f.write(content)
+    
     
 def readWriteFilesFromStdIn(file_list: list):
     """
@@ -42,6 +45,6 @@ def readWriteFilesFromStdIn(file_list: list):
     
     input =  getStdInContent()
     input = input.rstrip()
-    if ord(input[-1:]) == 26: input = input[:-1]
+    if len(input) > 0 and ord(input[-1:]) == 26: input = input[:-1]
     
     writeFiles(file_list, input)
