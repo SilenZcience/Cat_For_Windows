@@ -8,7 +8,7 @@
 <div align="center">
 <h2 align="center">Cat_For_Windows</h2>
    <p align="center">
-      Simple Command-line Tool made in AutoIt
+      Simple Command-line Tool made in AutoIt & Python
       <br/>
       <a href="https://github.com/SilenZcience/Cat_For_Windows/blob/main/Python/src/cat.py">
          <strong>Explore the code »</strong>
@@ -52,7 +52,7 @@
 This project copies the fundamental framework of the cat command-line tool from linux and translates its features to
 a windows executable file.
 
-Additionally it includes the feature to strip and reverse the content of any given file, make use of the standard-input, which enables cat piping into each other, generating che checksum of any file, and even convert decimal, hexadecimal and binary numbers within any text.
+Additionally it includes the feature to strip and reverse the content of any given file, make use of the standard-input, which enables cat piping into each other, generating the checksum of any file, and even convert decimal, hexadecimal and binary numbers within any text.
 
 ### Made With
 [![AutoIt][MadeWith-AutoIt]](https://www.autoitscript.com/site)
