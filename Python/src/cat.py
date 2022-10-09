@@ -8,7 +8,7 @@ from sys import exit as sysexit
 
 from util.ArgConstants import *
 import util.ArgParser as ArgParser
-import util.Checksum as Checksum
+import util.checksum as Checksum
 import util.Converter as Converter
 import util.Holder as Holder
 import util.StdInHelper as StdInHelper
