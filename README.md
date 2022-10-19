@@ -86,6 +86,11 @@ cd Cat_For_Windows\Python\bin
 ```
 2. Add the directory to your system-environment `PATH`-variables.
 
+or simply
+```console
+pip install cat-win
+```
+(reference: [cat_win](https://github.com/SilenZcience/cat_win))
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
