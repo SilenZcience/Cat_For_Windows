@@ -43,6 +43,7 @@
          <li><a href="#examples">Examples</a></li>
          </ul>
       </li>
+      <li><a href="#license">License</a></li>
       <li><a href="#contact">Contact</a></li>
    </ol>
 </details>
@@ -111,6 +112,10 @@ cat --help
 ![](img/example2.png?raw=true "example2.png")
 
 <p align="right">(<a href="#top">back to top</a>)</p>
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/SilenZcience/Cat_For_Windows/blob/main/LICENSE) file for details
 
 ## Contact
 
