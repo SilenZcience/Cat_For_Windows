@@ -4,6 +4,9 @@
 [![OS-Linux]][OS-Linux]
 [![OS-MacOS]][OS-MacOS]
 
+> ⚠️ **Deprecation Warning!**
+> This Repository is no longer maintained. Development moved to [cat_win](https://github.com/SilenZcience/cat_win)
+
 <br/>
 <div align="center">
 <h2 align="center">Cat_For_Windows</h2>
