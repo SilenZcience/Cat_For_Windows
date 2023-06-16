@@ -125,9 +125,9 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 > **SilenZcience** <br/>
 [![GitHub-SilenZcience][GitHub-SilenZcience]](https://github.com/SilenZcience)
 
-[OS-Windows]: https://svgshare.com/i/ZhY.svg
-[OS-Linux]: https://svgshare.com/i/Zhy.svg
-[OS-MacOS]: https://svgshare.com/i/ZjP.svg
+[OS-Windows]: https://img.shields.io/badge/os-windows-green
+[OS-Linux]: https://img.shields.io/badge/os-linux-green
+[OS-MacOS]: https://img.shields.io/badge/os-macOS-green
 
 [MadeWith-AutoIt]: https://img.shields.io/badge/Made%20with-AutoIt-brightgreen
 [MadeWith-Python]: https://img.shields.io/badge/Made%20with-Python-brightgreen
